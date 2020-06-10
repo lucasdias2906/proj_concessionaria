@@ -1,6 +1,7 @@
 const mysql = require("mysql")
-
-// const FormatWorkers = require("../validators/format")
+const { Encripty } = require("../services/EncriptyDecripty")
+const ValidationContract = require("../validators/worker_validator")
+// const FormatDate = require("../validators/format")
 
 const db = mysql.createConnection({
     multipleStatements: true,
@@ -37,6 +38,36 @@ exports.post = async (data, call) => {
         createdAt: new Date().getTime(),
         lastmodification: new Date().getTime()
     }
+
+    // Validação dos dados
+    const contract = new ValidationContract();
+
+    contract.hasMinLen(data.name, 3, 'O nome deve conter pelo menos 3 caracteres');
+    contract.isLogin(data.login, 6, "O login deve conter pelo menos 6 caracteres,digitos,letras minusculas e maiusculas,caractere especiais");
+    contract.isPassword(data.password, 8, "password deve conter pelo menos 8 caracteres,digitos,letras minusculas e maiusculas,caractere especiais");
+    contract.hasMinLen(data.rg, 9, 'O nome deve conter 9 caracteres');
+    contract.hasMinLen(data.cpf, 11, 'O nome deve conter pelo menos 11 caracteres');
+
+
+    console.log(contract.isValid())
+    // Se os dados forem inválidos
+    if (!contract.isValid()) {
+        console.log("ERRO EM VALIDAÇÃO", contract.errors())
+        return contract.errors();
+    }
+
+    // formatar CPF e DATA DE NASCIMENTO
+    // workers.cpf = FormatDate.formatCPF(workers.cpf)
+    // workers.birth = FormatDate.formatBirth(workers.birth)
+
+    // Criptografar os dados 
+    workers.name = Encripty.encryptValue(workers.name)
+    workers.password = Encripty.encryptValue(workers.password)
+    workers.birth = Encripty.encryptValue(workers.name)
+    workers.rg = Encripty.encryptValue(workers.name)
+    workers.cpf = Encripty.encryptValue(workers.name)
+
+    console.log("Dados Pessoais do Funcionario foram Criptografados com sucesso ")
 
 
     const values = workers

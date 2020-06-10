@@ -1,22 +1,19 @@
 
 
-function MascaraData(data){
-    if(data ==false){
-            event.returnValue = false;
-    }       
-    return MascaraData(data, '00/00/0000', event);
+
+exports.formatCPF = function mCPF(cpf) {
+    cpf = cpf.toString().replace(/\D/g, "")
+    cpf = cpf.replace(/(\d{3})(\d)/, "$1.$2")
+    cpf = cpf.replace(/(\d{3})(\d)/, "$1.$2")
+    cpf = cpf.replace(/(\d{3})(\d{1,2})$/, "$1-$2")
+    return cpf
 }
 
-// function MascaraCPF(cpf){
-//     if(mascaraInteiro(cpf)==false){
-//             event.returnValue = false;
-//     }       
-//     return formataCampo(cpf, '000.000.000-00', event);
-// }
+exports.formatBirth = function mBirthDay(dateValue) {
+    dateValue = dateValue.toString()
+    return dateValue.substr(0, 2) + "/" + dateValue.substr(2, 2) + "/" + dateValue.substr(4, 7)
+}
 
-// function MascaraRG(rg){
-//     if(mascaraInteiro(rg)==false){
-//             event.returnValue = false;
-//     }       
-//     return formataCampo(rg, '00.000.000-0', event);
-// }
+
+// console.log(mCPF(096459991845))
+// console.log(mBirthDay(27101997))
