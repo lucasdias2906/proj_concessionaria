@@ -9,6 +9,16 @@ const controWorkers = require("../controller/workers")
 const authWokers = require("../services/workers_auth")
 const FormatDate = require("../validators/format")
 const md5 = require("md5")
+const Nodersa = require("node-rsa")
+const key = new Nodersa({b:1024})
+
+var segredo = "ksdjskdjslkdjsldjsdk"
+
+var encryptedString = key.encrypt(segredo,"base64")// public
+console.log("PUBLIC ",encryptedString)
+var descrytedString = key.decrypt(encryptedString, "utf8")// private
+console.log("PRIVATE ",descrytedString)
+
 
 
 exports.postWorkers = (req, res, err) => {
